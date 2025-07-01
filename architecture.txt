@@ -1,0 +1,64 @@
+----------------------------------------------------
+Rules:
+
+How many players per game? Min=2 Max=4
+How many cards per player initially? 7 
+What types of cards? (Attack, Defense, Heal, Special)
+How do players win? (Points or Last man standing)
+Can players see each other's cards? (NO)
+---------------------------------------------------
+
+GameFlow:
+
+Game is Created
+Player Create A Match - specific id is Created
+Player Joins a Match using id
+Game Starts - Each Player gets 7 cards
+Turn loop starts:
+    Player A's turn:-
+        Draw a card (required)
+        Choose an action: Play a card, Pass, Attack
+Update Game Stats
+Move to Next Player
+    Game Ends When Condition is met - One player left and all eliminates
+---------------------------------------------------
+
+Main Components
+
+Game Session:
+    -> Game ID 
+    -> Player List
+    -> Deck (remaining cards)
+    -> Status (waiting, ongoing, finished)
+    -> Turn (whose turn)
+
+Player:
+    -> Player ID
+    -> Player Name
+    -> Hand (List of Cards)
+    -> Health
+    -> Status (active, disconnected)
+
+Card:
+    -> Card ID
+    -> Type (attack, defense, heal, special)
+    -> Description
+
+---------------------------------------------------
+
+DynamoDB table design: (What it will Store)
+    Table-Name: Game-Sessions | Stores Entry: GameID
+    Table-Name: Players | Stores Entry: PlayerID
+    Table-Name: Cards | Stores Entry: CardID
+
+---------------------------------------------------
+
+API's I will need:
+
+/createGame
+/joinGame
+/startGame
+/drawCard
+/throwCard
+/gameStats
+/endGame
