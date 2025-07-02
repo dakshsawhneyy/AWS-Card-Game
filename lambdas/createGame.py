@@ -5,7 +5,7 @@ import json     # for using response as json
 
 # Initialize DynamoDB client
 dynamodb = boto3.client('dynamodb')
-table = dynamodb.table('GameSessions')
+table = dynamodb.Table('GameSessions')
 
 # Defining List of Cards
 CARD_TYPES = ['attack', 'defence', 'heal', 'special']
