@@ -2,6 +2,7 @@ import boto3
 
 dynamodb = boto3.client('dynamodb')
 
+# In creation of table, only initialize unique identifier of the table
 dynamodb.create_table(
     TableName='GameSession',   
     KeySchema=[
@@ -17,7 +18,7 @@ dynamodb.create_table(
 )
 
 dynamodb.create_table(
-    TableName='Players'
+    TableName='Players',
     KeySchema=[
         { 'AttributeName': 'PlayerID', 'KeyType': 'HASH' },  # Unique HASH key
     ],
@@ -31,7 +32,7 @@ dynamodb.create_table(
 )
 
 dynamodb.create_table(
-    TableName='Cards'
+    TableName='Cards',
     KeySchema=[
         { 'AttributeName': 'CardID', 'KeyType': 'HASH' },  # Unique HASH key
     ],
