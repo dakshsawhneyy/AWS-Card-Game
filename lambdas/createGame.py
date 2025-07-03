@@ -15,7 +15,7 @@ def generate_deck():
     """Create a simple shuffled deck."""    # DocString, tells what a function should do
     deck = []   # initialize deck to empty -- it recieve pair{CardID,card_type}
     
-    for _ in (28):  # '_' means we dont need variable to store count, just create cards and 7*4player=28 cards
+    for _ in (52):  # '_' means we dont need variable to store count, just create cards and need cards to draw as well
         card_type = random.choice(CARD_TYPES)   # .coice is function inside random - pick random element from list
         card_id = str(uuid.uuid4())
         deck.append({card_type,card_id})
