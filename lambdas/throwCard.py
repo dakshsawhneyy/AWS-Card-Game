@@ -6,7 +6,7 @@ game_table = dynamodb.Table('GameSessions')
 player_table = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
-    body = json.load(event['body'])     # Fetch GameID, PlayerID and CardID player has dropped
+    body = json.loads(event['body'])     # Fetch GameID, PlayerID and CardID player has dropped
     game_id = body['GameID']        
     player_id = body['PlayerID']
     card_id = body['CardID']

@@ -6,7 +6,7 @@ game_table = dynamodb.Table('GameSessions')
 players_table = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
-    body = json.load(event['body'])
+    body = json.loads(event['body'])
     game_id = body['GameID']
     
     game_session = game_table.get(Key = {'GameID':game_id}).get('Item')
