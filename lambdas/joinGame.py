@@ -4,7 +4,7 @@ import json
 import datetime
 
 dynamodb = boto3.client('dynamodb')
-game_table = dynamodb.Table('GameSessions')     # need to fetch items from GameTable by providing GameID
+game_table = dynamodb.Table('GameSession')     # need to fetch items from GameTable by providing GameID
 players_table = dynamodb.table('Players')
 
 def lambda_handler(event, context):

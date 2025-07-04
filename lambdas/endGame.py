@@ -2,7 +2,7 @@ import boto3
 import json
 
 dynamodb = boto3.client('dynamodb')
-game_table = dynamodb.Table('GameSessions')
+game_table = dynamodb.Table('GameSession')
 
 def lambda_handler(event, context):
     body = json.loads(event[body])
