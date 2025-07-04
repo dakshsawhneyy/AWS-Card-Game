@@ -2,7 +2,7 @@ import boto3
 import json
 import random
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.resource('dynamodb')
 game_table = dynamodb.Table('GameSession')
 player_table = dynamodb.Table('Players')
 

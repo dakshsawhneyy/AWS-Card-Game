@@ -3,9 +3,9 @@ import uuid
 import json
 import datetime
 
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.resource('dynamodb')
 game_table = dynamodb.Table('GameSession')     # need to fetch items from GameTable by providing GameID
-players_table = dynamodb.table('Players')
+players_table = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
     player_id = str(uuid.uuid4())   # generate a random player id -- unique

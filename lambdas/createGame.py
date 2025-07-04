@@ -4,7 +4,7 @@ import random  # Python Library used to take random cards from cards_list
 import json     # for using response as json
 
 # Initialize DynamoDB client
-dynamodb = boto3.client('dynamodb')
+dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('GameSession')
 
 # Defining List of Cards
