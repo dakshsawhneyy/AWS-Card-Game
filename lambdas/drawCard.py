@@ -22,6 +22,10 @@ def lambda_handler(event, context):
         if not game_session:
             return { 'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}) }
         
+        # Check if its current player's turn, if yes then only proceed 
+        if player_id != game_session['CurrentTurn']:
+            return { 'statusCode': 400, 'body': json.dump({ 'message': 'Not your turn' }) }
+        
         # Load Deck from game_table
         deck = game_session['Deck']
         if not deck:
