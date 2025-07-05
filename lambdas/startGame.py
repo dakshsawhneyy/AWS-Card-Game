@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     # Give 7 Card to each player - using player_id, go in its player table and update Hand
     for player_id in player_ids:
         hand = []   # initially hand is empty
-        for _ in (7):
+        for _ in range(7):
             if deck:    # deck doesnt gets empty
                 hand.append(deck.pop())   # append card in hand and pop that from deck
         # Update player_table
