@@ -26,6 +26,10 @@ def lambda_handler(event, context):
     # Unique GameID using uuid library
     game_id = str(uuid.uuid4())  # uuid4 stands for generate most unique id
     
+    # Fetching Creator Name from body
+    body = json.load(event['body'])
+    creator_name = body['CreatorName']
+    
     # Initialize deck
     deck = generate_deck()
     
@@ -45,7 +49,8 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dump({
             'message': 'Game Created Successfully',
-            'GameID': game_id
+            'GameID': game_id,
+            'CreatorName': creator_name,
         })
     }
     
