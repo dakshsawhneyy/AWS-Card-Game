@@ -45,4 +45,4 @@ def lambda_function(event, context):
         ExpressionAttributeValues = {':val': deck}
     )
     
-    return { 'statusCode': 200, 'body':({ 'message': 'Card Drawn', 'NewHand': player_hand, 'RemainingDeck': len(deck) })}
+    return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card Drawn', 'NewHand': player_hand, 'RemainingDeck': len(deck) })}

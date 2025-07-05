@@ -48,5 +48,5 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
-        'body': json.dump({'message': 'Player Joined Successfully', 'PlayerID': player_id})
+        'body': json.dumps({'message': 'Player Joined Successfully', 'PlayerID': player_id})
     }

@@ -45,4 +45,4 @@ def lambda_handler(event, context):
         ExpressionAttributeValues = {':val': next_turn}
     )
     
-    return { 'statusCode': 200, 'body': ({ 'message': 'Card played', 'NextTurn': next_turn})}
+    return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played', 'NextTurn': next_turn})}

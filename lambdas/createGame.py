@@ -47,7 +47,7 @@ def lambda_handler(event, context):
     
     response = {
         'statusCode': 200,
-        'body': json.dump({
+        'body': json.dumps({
             'message': 'Game Created Successfully',
             'GameID': game_id,
             'CreatorName': creator_name,

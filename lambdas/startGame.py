@@ -48,4 +48,4 @@ def lambda_handler(event, context):
         ExpressionAttributeValues = { ':s': 'ongoing', ':d': deck, ':c': player_ids[0] }
     )
     
-    return { 'statusCode': 200, 'body': json.dump({'message': 'Game Started', 'FirstTurn': player_ids[0]}) }
+    return { 'statusCode': 200, 'body': json.dumps({'message': 'Game Started', 'FirstTurn': player_ids[0]}) }
