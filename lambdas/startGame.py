@@ -51,7 +51,6 @@ def lambda_handler(event, context):
         )
         
         return { 'statusCode': 200, 'body': json.dumps({'message': 'Game Started', 'FirstTurn': player_ids[0]}) }
-    
     except Exception as e:
         print(f"Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.

@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         return {'statusCode': 404, 'body': json.dump({'message': 'Game not found'})}
     
     # If Game Already Starts, then give error
-    if game_session['status'] != 'waiting':
+    if game_session['Status'] != 'waiting':
         return {'statusCode': 400, 'body': json.dump({'message': 'Cannot join, game already started'})}
     
     # Create Player
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
             'Hand': [],     # we will modify furthur
             'Health': 100,
             'Status': 'Active',
-            'LastActionAt': datetime.datetime.now().isoformat,  # Store current time in ISO format
+            'LastActionAt': datetime.datetime.now().isoformat(),  # Store current time in ISO format
         }   
     )
     
