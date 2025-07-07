@@ -18,15 +18,27 @@ def lambda_handler(event, context):
         # import player_ids
         player_ids = game_session['Players']
         
-        # Loop over player id, fetch their info and store in players list
-        players = []
+        # Storing Players info
+        players_info = []   # A dictionary
         for pid in player_ids:
             player = players_table.get_item(Key = {'PlayerID':pid}).get('Item')
             # if player is not empty, them append to players
             if player:
-                players.append(player)
+                players_info.append({   # Appending into dictionary
+                    'Name': player['Name'],
+                    'Health': player['Health'],
+                    'HandSize': len(player.get('Hand',[])),
+                    'Status': player.get('Status','Active')
+                })
                 
-        return { 'statusCode': 200, 'body': json.dumps({ 'Game': game_session, 'Players': players }) }
+        # Show Deck Size
+        deck = game_session.get('Deck',[])
+        deckLength = len(deck)
+        
+        # Show Current Player Turn
+        current_turn = game_session.get('CurrentTurn', None)
+                
+        return { 'statusCode': 200, 'body': json.dumps({ 'Game': game_session, 'Players': players_info, 'DeckLength': deckLength, 'CurrentTurn': current_turn }) }
     except Exception as e:
         print("Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
