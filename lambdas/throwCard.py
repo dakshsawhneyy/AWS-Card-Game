@@ -38,7 +38,22 @@ def lambda_handler(event, context):
         
         # Determine Next Player Turn - by fetching player_ids from game_table and add 1 to its id
         player_ids = game_session.get('Players', [])
-        next_index = (player_ids.index(player_id) + 1) % len(player_ids)    # fetch index of curr player from up list and add 1 to it
+        
+        curr_index = player_ids.index(player_id)
+        
+        # Adding logic to skip turn of player, if he's eliminated
+        while True:
+            next_index = (curr_index + 1) % len(player_ids)    # fetch index of curr player from up list and add 1 to it
+            next_player_id = player_ids[next_index]
+            
+            next_player_info = player_table.get_item(Key = {'PlayerID':next_player_id}).get('Item')
+            
+            # check elimination status
+            if next_player_info['Status'] != 'Eliminated':
+                break
+            else:
+                curr_index = next_index
+        
         next_turn = player_ids[next_index]
         
         
@@ -47,7 +62,7 @@ def lambda_handler(event, context):
         #! Apply Affect to player
         if card['Type'] == 'attack':
             if next_turn_player_info['Shield'] == False:
-                Health = next_turn_player_info['Health']
+                Health = next_turn_player_info.get('Health', 100)
                 Health = Health - 20
                 if Health <= 0:
                     next_turn_player_info['Status'] = 'Eliminated' # Eliminate Player from game
@@ -61,15 +76,15 @@ def lambda_handler(event, context):
                 )
             
         elif card['Type'] == 'defence':
-           # Add shield into player inside player_table
-           player_table.update_item(
+            # Add shield into player inside player_table
+            player_table.update_item(
                 Key = {'PlayerID': player_id},
                 UpdateExpression = 'SET Shield = :s',
                 ExpressionAttributeValues = {':s': True}   # Set shield to True
-           )
+            )
            
         elif card['Type'] == 'heal':
-            Health = player['Health']
+            Health = player.get('Health', 100)
             Health = Health + 20
             if Health > 100:
                 Health = 100
