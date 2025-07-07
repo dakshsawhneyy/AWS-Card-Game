@@ -4,6 +4,7 @@ import traceback
 
 dynamodb = boto3.resource('dynamodb')
 game_table = dynamodb.Table('GameSession')
+player_table = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
     try:
@@ -18,11 +19,28 @@ def lambda_handler(event, context):
         exp_attr_names = {'#s': 'Status'}
         exp_attr_values = {':s': 'ended'}
         
+            
+        game_session = game_table.get_item(Key = {'GameID': game_id}).get('Item')
+        player_ids = game_session['Players']
+            
+        # Manually end the game if only one active player is left
+        active_players = []
+        for pid in player_ids:
+            player_info = player_table.get_item(Key={'PlayerID': pid}).get('Item')
+            if player_info and player_info.get('Status') == 'Active':
+                active_players.append(pid)                
+
+        # If 1 active player lefts, declare him as winner
+        if len(active_players) == 1:
+            winner_id = active_players[0]
+            
+            
         # if WinnerID exists, then add updated winner expressison into update_exp variable
         if winner_id:
             update_exp += ', #w = :w'
             exp_attr_names['#w'] = 'WinnerID'
             exp_attr_values[':w'] = winner_id
+            
             
         # Update game_table
         game_table.update_item(
@@ -31,6 +49,7 @@ def lambda_handler(event, context):
             ExpressionAttributeNames = exp_attr_names,
             ExpressionAttributeValues = exp_attr_values   
         )
+        
         
         return { 'statusCode': 200, 'body': json.dumps({ 'message':'Game Ended', 'Winner': winner_id }) }
     except Exception as e:
