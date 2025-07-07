@@ -10,7 +10,6 @@ def lambda_handler(event, context):
     try:
         body = json.loads(event['body'])
         game_id = body['GameID']
-        winner_id = body['WinnerID']
         
         # we need to conditionally update game_data because even if winnerID doesnt exist, we need to update Status - ended otherwise validationError
         

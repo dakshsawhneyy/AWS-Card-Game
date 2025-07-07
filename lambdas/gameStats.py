@@ -25,9 +25,9 @@ def lambda_handler(event, context):
             # if player is not empty, them append to players
             if player:
                 players_info.append({   # Appending into dictionary
-                    'Name': player['Name'],
-                    'Health': player['Health'],
-                    'HandSize': len(player.get('Hand',[])),
+                    'Name': player['PlayerName'],
+                    'Health': int(player['Health']),
+                    'HandSize': int(len(player.get('Hand',[]))),
                     'Status': player.get('Status','Active')
                 })
                 

@@ -53,8 +53,7 @@ def lambda_handler(event, context):
         'body': json.dumps({
             'message': 'Game Created Successfully',
             'GameID': game_id,
-            'CreatorName': creator_name,
-            'Deck': deck
+            'CreatorName': creator_name
         })
     }
     

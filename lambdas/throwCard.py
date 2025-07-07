@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         
         # Check if its current player's turn, if yes then only proceed 
         if player_id != game_session['CurrentTurn']:
-            return { 'statusCode': 400, 'body': json.dump({ 'message': 'Not your turn' }) }
+            return { 'statusCode': 400, 'body': json.dumps({ 'message': 'Not your turn' }) }
         
         # import player and his hand
         player = player_table.get_item(Key = {'PlayerID':player_id}).get('Item')
@@ -61,7 +61,7 @@ def lambda_handler(event, context):
         
         #! Apply Affect to player
         if card['Type'] == 'attack':
-            if next_turn_player_info['Shield'] == False:
+            if next_turn_player_info.get('Shield',False) == False:
                 Health = next_turn_player_info.get('Health', 100)
                 Health = Health - 20
                 if Health <= 0:
@@ -123,7 +123,8 @@ def lambda_handler(event, context):
         # Update Next Player Table
         player_table.update_item(
             Key = {'PlayerID':next_turn},
-            UpdateExpression = 'SET Health = :h, Status = :s',
+            UpdateExpression = 'SET Health = :h, #s = :s',
+            ExpressionAttributeNames = {'#s': 'Status'},  # Using #s because Status is a reserved keyword in DynamoDB
             ExpressionAttributeValues = {':h': next_turn_player_info['Health'], ':s': next_turn_player_info['Status'] }   # Update Hand and Health of next player
         )
         
