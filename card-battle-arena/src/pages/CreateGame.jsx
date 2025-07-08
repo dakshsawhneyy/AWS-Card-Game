@@ -12,11 +12,11 @@ const CreateGame = () => {
             const response = await axios.post("https://a7suws2gr6.execute-api.ap-south-1.amazonaws.com/dev/createGame", { CreatorName: playerName, }) // Sending PlayerName as body
             console.log(response)
             const gameId = response.data.GameID;
-            // const playerId = response.data.PlayerID;
+            const playerId = response.data.PlayerID;
 
             // Save Info to local storage
             localStorage.setItem('gameId',gameId)
-            // localStorage.setItem('playerId',playerId)
+            localStorage.setItem('playerId',playerId)
             
             // Navigate to Lobby
             navigate('/lobby')
