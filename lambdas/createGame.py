@@ -2,10 +2,12 @@ import boto3
 import uuid     # Python Library that creates unique id
 import random  # Python Library used to take random cards from cards_list
 import json     # for using response as json
+import datetime
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('GameSession')
+players_table = dynamodb.Table('Players')
 
 # Defining List of Cards
 CARD_TYPES = ['attack', 'defence', 'heal', 'special']
@@ -26,8 +28,9 @@ def generate_deck():
     return deck
 
 def lambda_handler(event, context):
-    # Unique GameID using uuid library
+    # Unique GameID and player id using uuid library
     game_id = str(uuid.uuid4())[:8]  # uuid4 stands for generate most unique id
+    player_id = str(uuid.uuid4())[:8]
     
     # Fetching Creator Name from body
     body = json.loads(event['body'])
@@ -36,16 +39,29 @@ def lambda_handler(event, context):
     # Initialize deck
     deck = generate_deck()
     
+    # Create Player entry to Database
+    players_table.put_item(
+        Item = {
+            'PlayerID': player_id,
+            'GameID': game_id,
+            'PlayerName': creator_name,
+            'Hand': [],     # we will modify furthur
+            'Health': 100,
+            'Status': 'Active',
+            'LastActionAt': datetime.datetime.now().isoformat(),  # Store current time in ISO format
+        }
+    )
+    
     # Create GameSession Entry in DynamoDB
     table.put_item(
         Item={
             'GameID': game_id,
             'Status': 'waiting',
             'Deck': deck,
-            'Players': [],
-            'CurrentTurn': None,
+            'Players': [player_id],
+            'CurrentTurn': player_id,
             'CreatedAt': context.aws_request_id     # Every time AWS Lambda runs, it assigns a unique request ID.
-        }   
+        }
     )
     
     response = {
@@ -58,6 +74,7 @@ def lambda_handler(event, context):
         'body': json.dumps({
             'message': 'Game Created Successfully',
             'GameID': game_id,
+            'PlayerID': player_id,
             'CreatorName': creator_name
         })
     }
