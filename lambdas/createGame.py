@@ -17,7 +17,7 @@ def generate_deck():
     
     for _ in range(52):  # '_' means we dont need variable to store count, just create cards and need cards to draw as well
         card_type = random.choice(CARD_TYPES)   # .coice is function inside random - pick random element from list
-        card_id = str(uuid.uuid4())
+        card_id = str(uuid.uuid4())[:8]
         deck.append({
             'CardID': card_id,
             'Type': card_type
@@ -27,7 +27,7 @@ def generate_deck():
 
 def lambda_handler(event, context):
     # Unique GameID using uuid library
-    game_id = str(uuid.uuid4())  # uuid4 stands for generate most unique id
+    game_id = str(uuid.uuid4())[:8]  # uuid4 stands for generate most unique id
     
     # Fetching Creator Name from body
     body = json.loads(event['body'])

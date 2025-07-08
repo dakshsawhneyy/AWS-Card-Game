@@ -10,7 +10,7 @@ players_table = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
     try:
-        player_id = str(uuid.uuid4())   # generate a random player id -- unique
+        player_id = str(uuid.uuid4())[:8]   # generate a random player id -- unique
         
         # Fetch these details from body i.e. whenever a client sends data (postman or frontend), it sends as json object "Body"
         body = json.loads(event['body'])    # Load Body i.e. Load JSON data
@@ -50,9 +50,20 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            },
             'body': json.dumps({'message': 'Player Joined Successfully', 'PlayerID': player_id})
         }
     except Exception as e:
         print("Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
-        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) }
+        return { 
+            'statusCode': 500, 
+            'headers':{     # Required for error http://localhost:5173' has been blocked by CORS policy
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            },
+            'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) 
+        }
