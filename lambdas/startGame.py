@@ -12,7 +12,8 @@ def lambda_handler(event, context):
         # get GameID as an input
         body = json.loads(event['body'])
         game_id = body['GameID']
-        
+        player_id = body['PlayerID']    # only the admin is able to start the game
+                
         # fetch game_session from game_table
         game_session = game_table.get_item(Key={'GameID': game_id}).get('Item')
         if not game_session:
@@ -20,6 +21,13 @@ def lambda_handler(event, context):
         
         # fetch player_ids from player_table
         player_ids = game_session.get('Players', []) # if no player, then return empty array
+        
+        # Fetch the id of the player that created the game
+        admin_player = player_ids[0]
+        
+        # if current player is not equal to admin, he cannot start the game
+        if player_id != admin_player:
+            return { 'statusCode': 403, 'body': json.dumps({'message': 'Only the game creator can start the game'}) }
         
         # Atleast 2 players are needed to play the game
         if len(player_ids) < 2:
