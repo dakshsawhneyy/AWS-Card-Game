@@ -50,6 +50,11 @@ def lambda_handler(event, context):
     
     response = {
         'statusCode': 200,
+        # Without these headers, error was coming http://localhost:5173' has been blocked by CORS policy
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true'  # optional, keep if you might use cookies or auth
+        },
         'body': json.dumps({
             'message': 'Game Created Successfully',
             'GameID': game_id,
