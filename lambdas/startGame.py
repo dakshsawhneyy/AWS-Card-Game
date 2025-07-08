@@ -58,8 +58,22 @@ def lambda_handler(event, context):
             ExpressionAttributeValues = { ':s': 'ongoing', ':d': deck, ':c': player_ids[0] }
         )
         
-        return { 'statusCode': 200, 'body': json.dumps({'message': 'Game Started', 'FirstTurn': player_ids[0]}) }
+        return { 
+            'statusCode': 200, 
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'  # optional, keep if you might use cookies or auth
+            },
+            'body': json.dumps({'message': 'Game Started', 'FirstTurn': player_ids[0]}) 
+        }
     except Exception as e:
         print(f"Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
-        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) }
+        return { 
+            'statusCode': 500, 
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'  # optional, keep if you might use cookies or auth
+            },
+            'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)})
+        }

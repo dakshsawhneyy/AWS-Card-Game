@@ -22,6 +22,10 @@ def lambda_handler(event, context):
         if not game_session:
             return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'})}
         
+        # If player size exceeds 4, dont add player
+        if len(game_session['Players']) > 4:
+            return {'statusCode': 400, 'body': json.dumps({'message': 'Cannot join, maximum players reached'})}
+        
         # If Game Already Starts, then give error
         if game_session['Status'] != 'waiting':
             return {'statusCode': 400, 'body': json.dumps({'message': 'Cannot join, game already started'})}

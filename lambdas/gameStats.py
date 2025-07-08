@@ -13,7 +13,7 @@ def lambda_handler(event, context):
         
         game_session = game_table.get_item(Key = {'GameID':game_id}).get('Item')
         if not game_session:
-            return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'})}
+            return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # import player_ids
         player_ids = game_session['Players']
@@ -38,8 +38,22 @@ def lambda_handler(event, context):
         # Show Current Player Turn
         current_turn = game_session.get('CurrentTurn', None)
                 
-        return { 'statusCode': 200, 'body': json.dumps({ 'Game': game_session, 'Players': players_info, 'DeckLength': deckLength, 'CurrentTurn': current_turn }) }
+        return { 
+            'statusCode': 200, 
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'  # optional, keep if you might use cookies or auth
+            },
+            'body': json.dumps({ 'Game': game_session, 'Players': players_info, 'DeckLength': deckLength, 'CurrentTurn': current_turn }) 
+        }
     except Exception as e:
         print("Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
-        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) }
+        return { 
+            'statusCode': 500, 
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'  # optional, keep if you might use cookies or auth
+            },
+            'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) 
+        }
