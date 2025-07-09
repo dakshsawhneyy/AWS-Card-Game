@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Lobby = () => {
   
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState([]);   // fetched players from gameStats, stored in list, mapped the list and named the players
   const gameId = localStorage.getItem('gameId')
   const playerId = localStorage.getItem('playerId')
   const navigate = useNavigate()
