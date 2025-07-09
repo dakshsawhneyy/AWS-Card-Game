@@ -22,7 +22,7 @@ const JoinGame = () => {
       navigate('/lobby');
     } catch (error) {
       console.error("Error joining game:", error)
-      alert("Failed to join game. Please try again later.")
+      alert(error.response.data.message || "Cannot join game. Please try again.")
     }
   }
 

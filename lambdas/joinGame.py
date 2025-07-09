@@ -20,15 +20,15 @@ def lambda_handler(event, context):
         # fetch all items or all game_session using game_id as key and fetching items as its value
         game_session = game_table.get_item(Key={'GameID': game_id}).get('Item') # Game ID has value and Items list, we pass GameID and it gives us list of items
         if not game_session:
-            return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'})}
+            return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # If player size exceeds 4, dont add player
         if len(game_session['Players']) > 4:
-            return {'statusCode': 400, 'body': json.dumps({'message': 'Cannot join, maximum players reached'})}
+            return {'statusCode': 400, 'body': json.dumps({'message': 'Cannot join, maximum players reached'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # If Game Already Starts, then give error
         if game_session['Status'] != 'waiting':
-            return {'statusCode': 400, 'body': json.dumps({'message': 'Cannot join, game already started'})}
+            return {'statusCode': 400, 'body': json.dumps({'message': 'Cannot join, game already started'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # Create Player
         players_table.put_item(
