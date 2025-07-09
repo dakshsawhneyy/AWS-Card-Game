@@ -17,7 +17,7 @@ def lambda_handler(event, context):
         # fetch game_session from game_table
         game_session = game_table.get_item(Key={'GameID': game_id}).get('Item')
         if not game_session:
-            return { 'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}) }
+            return { 'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true' }}
         
         # fetch player_ids from player_table
         player_ids = game_session.get('Players', []) # if no player, then return empty array
@@ -27,11 +27,11 @@ def lambda_handler(event, context):
         
         # if current player is not equal to admin, he cannot start the game
         if player_id != admin_player:
-            return { 'statusCode': 403, 'body': json.dumps({'message': 'Only the game creator can start the game'}) }
+            return { 'statusCode': 403, 'body': json.dumps({'message': 'Only the game creator can start the game'}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # Atleast 2 players are needed to play the game
         if len(player_ids) < 2:
-            return { 'statusCode': 400, 'body': json.dumps({'message': 'At least 2 players are required to start the game'}) }
+            return { 'statusCode': 400, 'body': json.dumps({'message': 'At least 2 players are required to start the game'}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true' }}
         
         # fetch deck and shuffle the deck
         deck = game_session['Deck']

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-
 const CreateGame = () => {
     const [playerName, setPlayerName] = useState(""); 
     const navigate = useNavigate();
