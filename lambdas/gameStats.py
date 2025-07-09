@@ -25,8 +25,11 @@ def lambda_handler(event, context):
             if player:
                 players_info.append({   # Appending into dictionary
                     'Name': player['PlayerName'],
+                    'PlayerID': pid,
                     'Health': int(player['Health']),
                     'HandSize': int(len(player.get('Hand',[]))),
+                    'Shield': player.get('Shield', None),
+                    'Hand': player.get('Hand',[]),
                     'Status': player.get('Status','Active')
                 })
                 

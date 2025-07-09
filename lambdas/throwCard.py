@@ -17,11 +17,11 @@ def lambda_handler(event, context):
         # import game_session
         game_session = game_table.get_item(Key = {'GameID':game_id}).get('Item')
         if not game_session:
-            return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'})}
+            return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # Check if its current player's turn, if yes then only proceed 
         if player_id != game_session['CurrentTurn']:
-            return { 'statusCode': 400, 'body': json.dumps({ 'message': 'Not your turn' }) }
+            return { 'statusCode': 400, 'body': json.dumps({ 'message': 'Not your turn' }), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # import player and his hand
         player = player_table.get_item(Key = {'PlayerID':player_id}).get('Item')
@@ -34,7 +34,7 @@ def lambda_handler(event, context):
         updated_hand = [c for c in hand if c['CardID'] != card_id]   #! gimme list as o/p and loop on every card & check if c is not card we want to throw, add to updated hand
         # check if length of hand == updated_hand, meaning no card is thrown
         if len(hand) == len(updated_hand):
-            return {'statusCode': 400, 'body': json.dumps({'message': 'Card not found in hand'})}
+            return {'statusCode': 400, 'body': json.dumps({'message': 'Card not found in hand'}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         # Determine Next Player Turn - by fetching player_ids from game_table and add 1 to its id
         player_ids = game_session.get('Players', [])
@@ -108,7 +108,7 @@ def lambda_handler(event, context):
                 )
         
         else:
-            return {'statusCode': 400, 'body': json.dumps({'message': 'Invalid card type'})}
+            return {'statusCode': 400, 'body': json.dumps({'message': 'Invalid card type'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
         
         
@@ -136,8 +136,8 @@ def lambda_handler(event, context):
             ExpressionAttributeValues = {':val': next_turn}
         )
         
-        return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played', 'NextTurn': next_turn})}
+        return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played', 'NextTurn': next_turn}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
     except Exception as e: 
         print("Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
-        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) }
+        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
