@@ -8,8 +8,7 @@ players_table = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
     try:
-        body = json.loads(event['body'])
-        game_id = body['GameID']
+        game_id = event['queryStringParameters']['GameID']  # Get doesnt support body, so it needs to recieve data in params
         
         game_session = game_table.get_item(Key = {'GameID':game_id}).get('Item')
         if not game_session:
