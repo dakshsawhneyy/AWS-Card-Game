@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Lobby = () => {
   
   const [players, setPlayers] = useState([]);   // fetched players from gameStats, stored in list, mapped the list and named the players
+  const [status, setStatus] = useState("")
   const gameId = localStorage.getItem('gameId')
   const playerId = localStorage.getItem('playerId')
   const navigate = useNavigate()
@@ -20,10 +21,12 @@ const Lobby = () => {
           }
         })
         setPlayers(response.data.Players || []);    // Add players to players list for retrival of their names
-        // console.log(response)
+        // console.log(response.data.Game.Status)
+        setStatus(response.data.Game.Status)  // Store status so that players can be directed to game, once game starts
+        if(response.data.Game.Status === 'ongoing') navigate('/game')
       } catch (error) {
         console.error(error)
-        alert()
+        alert(error.response.data.message || "An unexpected error occurred")
       }
     }
     
