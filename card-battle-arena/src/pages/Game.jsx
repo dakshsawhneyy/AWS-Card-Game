@@ -93,7 +93,7 @@ const Game = () => {
       {/* Show All Players Cards, by mapping app items in gameInfo.Players -> load all data and show as card */}
       <div className="flex flex-wrap justify-center gap-4 my-3">
         {gameInfo.Players?.map((item) => (
-          <PlayerCard key={item.Name} playerInfo={item} currentTurn={gameInfo.CurrentTurn === item.playerId}/>
+          <PlayerCard key={item.Name} playerInfo={item} currentTurn={gameInfo.CurrentTurn === item.PlayerID} myTurn={gameInfo.CurrentTurn === playerId}/>
         ))}
       </div>
 
@@ -104,6 +104,9 @@ const Game = () => {
         ))}
       </div>
 
+      <button onClick={drawCard} className={`px-6 py-3 rounded-xl transition ${isMyTurn ? "bg-black hover:scale-105" : "bg-gray-600 cursor-not-allowed"}`}>Draw a Card</button>
+
+      {message && <p className="mt-4">{message}</p>}
     </div>
   )
 }
