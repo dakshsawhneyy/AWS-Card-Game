@@ -24,6 +24,7 @@ const Game = () => {
         }
       })
       setGameInfo(response.data)
+      // console.log(response.data)
 
       // Find current player stats with its id -- traverse in data and compare matching id and fetch its data
       const pInfo = response.data.Players.find(p => p.PlayerID === playerId)
@@ -93,7 +94,7 @@ const Game = () => {
       {/* Show All Players Cards, by mapping app items in gameInfo.Players -> load all data and show as card */}
       <div className="flex flex-wrap justify-center gap-4 my-3">
         {gameInfo.Players?.map((item) => (
-          <PlayerCard key={item.Name} playerInfo={item} currentTurn={gameInfo.CurrentTurn === item.PlayerID} myTurn={gameInfo.CurrentTurn === playerId}/>
+          <PlayerCard key={item.Name} playerInfo={item} currentTurn={gameInfo.CurrentTurn === item.PlayerID} playerId={playerId}/>
         ))}
       </div>
 
