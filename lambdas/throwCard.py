@@ -58,6 +58,7 @@ def lambda_handler(event, context):
         
         
         next_turn_player_info = player_table.get_item(Key = {'PlayerID':next_turn}).get('Item')        
+        hand_for_special = updated_hand.copy()
         
         #! Apply Affect to player
         if card['Type'] == 'attack':
@@ -85,32 +86,29 @@ def lambda_handler(event, context):
            
         elif card['Type'] == 'heal':
             Health = player.get('Health', 100)
-            Health = Health + 20
-            if Health > 100:
-                Health = 100
+            if Health + 20 > 100:
+                return {'statusCode': 400, 'body': json.dumps({'message': 'Health cannot exceed 100, Throw Another Card'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
+            else:
+                Health = Health + 20
             player['Health'] = Health
         
         elif card['Type'] == 'special':
-            # Steal a random card from next player
+            # Give a random card to next player
             next_player_hand = next_turn_player_info['Hand']
-            if not next_player_hand:
-                pass # No Card to steal, his hand is empty
-            else:
-                random_card = random.choice(next_player_hand)
-                updated_next_hand = [c for c in next_player_hand if c['CardID'] != random_card['CardID']]   # store all cards except that stolen one
-                # Update Current Player hand
-                updated_hand.append(random_card)
-                # Update next player hand in player_table
+            if updated_hand:
+                random_card = random.choice(updated_hand)
+                hand_for_special = [c for c in updated_hand if c['CardID'] != random_card['CardID']]   # store all cards except that stolen one
+                next_player_hand.append(random_card)
                 player_table.update_item(
                     Key = {'PlayerID':next_turn},
                     UpdateExpression = 'SET Hand = :val',
-                    ExpressionAttributeValues = {':val': updated_next_hand}   # Update Hand next player
+                    ExpressionAttributeValues = {':val': next_player_hand}   # Update Hand next player
                 )
         
         else:
             return {'statusCode': 400, 'body': json.dumps({'message': 'Invalid card type'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
-        
+        updated_hand = hand_for_special
         
         # Update Current Player Table
         player_table.update_item(
@@ -135,6 +133,32 @@ def lambda_handler(event, context):
             UpdateExpression = 'SET CurrentTurn = :val',
             ExpressionAttributeValues = {':val': next_turn}
         )
+        
+        # Updating winner if after throwing Card, player deck becomes 0, declare him as winner
+        WinnerID = None # initially
+        active_players = []
+        
+        for pid in player_ids:
+            p_info = player_table.get_item(Key={'PlayerID': pid}).get('Item')
+            if p_info and p_info.get('Status') == 'Active':
+                active_players.append(pid)
+                # if player deck lentgh becomes 0, make him the winner
+                if len(p_info.get('Hand',[])) == 0:
+                    WinnerID = pid
+                    break
+                
+        # if winner ID nhi hai tb bhi active players 1 hi hai toh usko winner declare krdo
+        if not WinnerID and len(active_players) == 1:
+            WinnerID = active_players[0]
+            
+        # Update game table, if WinnerID is present
+        if WinnerID:
+            game_table.update_item(
+                Key = {"GameID":game_id},
+                UpdateExpression = 'SET #s = :s, #w = :w',
+                ExpressionAttributeNames = { '#s': 'Status', '#w': 'WinnerID' },
+                ExpressionAttributeValues = {':s': 'ended', ':w': WinnerID}
+            )
         
         return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played', 'NextTurn': next_turn}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
     except Exception as e: 
