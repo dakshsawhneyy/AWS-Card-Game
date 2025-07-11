@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import Card from "../components/Card";
 import PlayerCard from "../components/PlayerCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 const Game = () => {
@@ -12,6 +12,8 @@ const Game = () => {
   const [hand, setHand] = useState([]); 
   const [message, setMessage] = useState("");   // to show messages like Card Drawn, Card Thrown 
   const [currentTurnPlayer, setCurrentTurnPlayer] = useState("")  // store the name of player whose current turn is going on
+
+  const navigate = useNavigate()
 
   // fetch gameId and playerId from local storage
   const gameId = localStorage.getItem('gameId')
@@ -93,6 +95,7 @@ const Game = () => {
         PlayerID: playerId,
       })
       toast.success("Game ended successfully!")
+      navigate('/stats')
     } catch (error) {
       console.error(error)
       alert(error.response.message || "An unexpected error occurred")
@@ -103,7 +106,6 @@ const Game = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-400 to-pink-500 flex flex-col items-center p-8 text-white">
-      <Link to="/stats"><button className="fixed top-0 right-0 w-24 py-4 px-2 flex border-1 border-black drop-shadow-2xl">Show Stats</button></Link>
       <h1 className="text-4xl font-bold mb-4">Game Arena</h1>
 
       <h1 className="text-3xl font-bold">Players:</h1>

@@ -142,7 +142,7 @@ def lambda_handler(event, context):
             p_info = player_table.get_item(Key={'PlayerID': pid}).get('Item')
             if p_info and p_info.get('Status') == 'Active':
                 active_players.append(pid)
-                # if player deck lentgh becomes 0, make him the winner
+                #* if player deck length becomes 0, make him the winner
                 if len(p_info.get('Hand',[])) == 0:
                     WinnerID = pid
                     break
@@ -160,7 +160,7 @@ def lambda_handler(event, context):
                 ExpressionAttributeValues = {':s': 'ended', ':w': WinnerID}
             )
         
-        return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played', 'NextTurn': next_turn}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
+        return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played', 'NextTurn': next_turn, 'WinnerID': WinnerID if WinnerID else None}), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
     except Exception as e: 
         print("Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
