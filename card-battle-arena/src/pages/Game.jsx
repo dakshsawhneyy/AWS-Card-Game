@@ -43,6 +43,11 @@ const Game = () => {
       const cpname = response.data.Players.find(p => p.PlayerID === cturn) // Compare this id with All Players ID, and then fetch its name
       setCurrentTurnPlayer(cpname.Name)
       
+      // if Game Status is ended, navigate directly to stats
+      if(gameInfo.Status == 'ended'){
+        navigate('/stats')
+      }
+
     } catch (error) {
       console.error(error)
       alert(error.response.data.message || "An unexpected error occurred")
