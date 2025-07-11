@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import Card from "../components/Card";
 import PlayerCard from "../components/PlayerCard";
+import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Game = () => {
 
@@ -83,10 +85,25 @@ const Game = () => {
     }
   }
 
+  // End Game logic
+  const endGame = async() => {
+    try {
+      const response = await axios.post("https://a7suws2gr6.execute-api.ap-south-1.amazonaws.com/dev/endGame",{
+        GameID: gameId,
+        PlayerID: playerId,
+      })
+      toast.success("Game ended successfully!")
+    } catch (error) {
+      console.error(error)
+      alert(error.response.message || "An unexpected error occurred")
+    }
+  }
+
   const isMyTurn = gameInfo.CurrentTurn === playerId;   // return true or false and be used for playing turn of player
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-400 to-pink-500 flex flex-col items-center p-8 text-white">
+      <Link to="/stats"><button className="fixed top-0 right-0 w-24 py-4 px-2 flex border-1 border-black drop-shadow-2xl">Show Stats</button></Link>
       <h1 className="text-4xl font-bold mb-4">Game Arena</h1>
 
       <h1 className="text-3xl font-bold">Players:</h1>
@@ -108,6 +125,9 @@ const Game = () => {
       <button onClick={drawCard} className={`px-6 py-3 rounded-xl transition ${isMyTurn ? "bg-black hover:scale-105" : "bg-gray-600 cursor-not-allowed"}`}>Draw a Card</button>
 
       {message && <p className="mt-4">{message}</p>}
+
+      { /* End Game Button, Calling of End Game API */}
+      <button className="mt-4 bg-red-600 hover:bg-red-800 px-6 py-3 rounded-xl transition" onClick={endGame}>END GAME</button>
     </div>
   )
 }

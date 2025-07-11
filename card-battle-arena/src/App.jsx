@@ -5,19 +5,24 @@ import JoinGame from "./pages/JoinGame";
 import Lobby from "./pages/Lobby";
 import Game from "./pages/Game";
 import Stats from "./pages/Stats";
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create" element={<CreateGame />} />
-        <Route path="/join" element={<JoinGame />} />
-        <Route path="/lobby" element={<Lobby />} />
-        <Route path="/game" element={<Game />} />
-        <Route path="/stats" element={<Stats />} />
-      </Routes>
-    </Router>
+    <div className="">
+      <ToastContainer />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create" element={<CreateGame />} />
+          <Route path="/join" element={<JoinGame />} />
+          <Route path="/lobby" element={<Lobby />} />
+          <Route path="/game" element={<Game />} />
+          <Route path="/stats" element={<Stats />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
