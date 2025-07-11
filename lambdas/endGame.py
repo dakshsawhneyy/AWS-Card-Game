@@ -10,9 +10,11 @@ def lambda_handler(event, context):
     try:
         body = json.loads(event['body'])
         game_id = body['GameID']
+        player_id = body['PlayerID']
+        winner_id = body.get('WinnerID')    # if no gameID found, no issues return None
         
         # we need to conditionally update game_data because even if winnerID doesnt exist, we need to update Status - ended otherwise validationError
-        
+                
         # Updating Status
         update_exp = 'SET #s = :s'
         exp_attr_names = {'#s': 'Status'}
@@ -21,6 +23,10 @@ def lambda_handler(event, context):
             
         game_session = game_table.get_item(Key = {'GameID': game_id}).get('Item')
         player_ids = game_session['Players']
+            
+        # only admin can manually end the game, no other player can
+        if player_id != player_ids[0]:
+            return { 'statusCode': 403, 'body': json.dumps({'message': 'Forbidden: Only the game admin can end the game.'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
             
         # Manually end the game if only one active player is left
         active_players = []
@@ -49,9 +55,8 @@ def lambda_handler(event, context):
             ExpressionAttributeValues = exp_attr_values   
         )
         
-        
-        return { 'statusCode': 200, 'body': json.dumps({ 'message':'Game Ended', 'Winner': winner_id }) }
+        return { 'statusCode': 200, 'body': json.dumps({ 'message':'Game Ended', 'Winner': winner_id if winner_id else None }),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
     except Exception as e:
         print("Error:", e)
         traceback.print_exc()   # print detailed info about what went wrong.
-        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}) }
+        return { 'statusCode': 500, 'body': json.dumps({'message': 'Internal Server Error', 'error': str(e)}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
