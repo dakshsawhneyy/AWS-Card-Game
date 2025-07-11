@@ -72,7 +72,7 @@ const Game = () => {
       fetchGame()
     } catch (error) {
       console.error(error)
-      alert(error.response.message || "An unexpected error occurred")
+      alert(error.response.data.message || "An unexpected error occurred")
     }
   }
   
@@ -88,7 +88,7 @@ const Game = () => {
       fetchGame();
     } catch (error) {
       console.error(error)
-      alert(error.response.message || "An unexpected error occurred")
+      alert(error.response.data.message || "An unexpected error occurred")
     }
   }
 
@@ -103,7 +103,7 @@ const Game = () => {
       navigate('/stats')
     } catch (error) {
       console.error(error)
-      alert(error.response.message || "An unexpected error occurred")
+      alert(error.response.data.message || "An unexpected error occurred")
     }
   }
 
