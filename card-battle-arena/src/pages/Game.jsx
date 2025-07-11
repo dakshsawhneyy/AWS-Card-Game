@@ -28,7 +28,7 @@ const Game = () => {
         }
       })
       setGameInfo(response.data)
-      console.log(response.data)
+      // console.log(response.data)
 
       // Find current player stats with its id -- traverse in data and compare matching id and fetch its data
       const pInfo = response.data.Players.find(p => p.PlayerID === playerId)

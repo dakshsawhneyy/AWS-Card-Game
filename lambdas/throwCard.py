@@ -19,6 +19,8 @@ def lambda_handler(event, context):
         if not game_session:
             return {'statusCode': 404, 'body': json.dumps({'message': 'Game not found'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
+        deck = game_session['Deck']
+        
         # Check if its current player's turn, if yes then only proceed 
         if player_id != game_session['CurrentTurn']:
             return { 'statusCode': 400, 'body': json.dumps({ 'message': 'Not your turn' }), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
@@ -95,10 +97,11 @@ def lambda_handler(event, context):
         elif card['Type'] == 'special':
             # Give a random card to next player
             next_player_hand = next_turn_player_info['Hand']
-            if updated_hand:
-                random_card = random.choice(updated_hand)
-                hand_for_special = [c for c in updated_hand if c['CardID'] != random_card['CardID']]   # store all cards except that stolen one
-                next_player_hand.append(random_card)
+            if deck:
+                num_cards_to_give = min(5,len(deck))
+                random_cards = random.sample(deck,num_cards_to_give)     # from deck, pick number of cards to give
+                next_player_hand.extend(random_cards)
+                deck = [c for c in deck if c not in random_cards]
                 player_table.update_item(
                     Key = {'PlayerID':next_turn},
                     UpdateExpression = 'SET Hand = :val',
@@ -107,9 +110,7 @@ def lambda_handler(event, context):
         
         else:
             return {'statusCode': 400, 'body': json.dumps({'message': 'Invalid card type'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
-        
-        updated_hand = hand_for_special
-        
+                
         # Update Current Player Table
         player_table.update_item(
             Key = {'PlayerID':player_id},
@@ -130,8 +131,8 @@ def lambda_handler(event, context):
         # Update Next Turn in GameSessions table
         game_table.update_item(
             Key = {'GameID':game_id},
-            UpdateExpression = 'SET CurrentTurn = :val',
-            ExpressionAttributeValues = {':val': next_turn}
+            UpdateExpression = 'SET CurrentTurn = :val, Deck = :deck',
+            ExpressionAttributeValues = {':val': next_turn, ':deck': deck}
         )
         
         # Updating winner if after throwing Card, player deck becomes 0, declare him as winner
