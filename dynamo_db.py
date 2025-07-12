@@ -44,3 +44,17 @@ dynamodb.create_table(
         'WriteCapacityUnits': 5
     }
 )
+
+dynamodb.create_table(
+    TableName='Connections',
+    KeySchema=[
+        {'AttributeName': 'ConnectionID', 'KeyType': 'HASH'},   # unique ConnectionID
+    ],
+    AttributeDefinitions=[
+        {'AttributeName': 'ConnectionID', 'AttributeType': 'S'},  # String type
+    ],
+    ProvisionedThroughput={
+        'ReadCapacityUnits': 5,     # 5 read/write per second
+        'WriteCapacityUnits': 5
+    }
+)
