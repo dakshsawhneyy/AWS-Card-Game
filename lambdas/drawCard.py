@@ -24,7 +24,7 @@ def lambda_handler(event, context):
         
         # Check if its current player's turn, if yes then only proceed 
         if player_id != game_session['CurrentTurn']:
-            return { 'statusCode': 400, 'body': json.dump({ 'message': 'Not your turn' }), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
+            return { 'statusCode': 400, 'body': json.dumps({ 'message': 'Not your turn' }), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
         
         # Load Deck from game_table
         deck = game_session['Deck']

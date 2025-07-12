@@ -69,7 +69,16 @@ def lambda_handler(event, context):
                 Health = Health - 20
                 if Health <= 0:
                     next_turn_player_info['Status'] = 'Eliminated' # Eliminate Player from game
-                next_turn_player_info['Health'] = Health    # Update Health of player
+                    next_turn_player_info['Health'] = 0 # if its less than 0, make it 0
+                else:
+                    next_turn_player_info['Health'] = Health    # Update Health of player
+                # immediately update next player status
+                player_table.update_item(
+                    Key = {'PlayerID':next_turn},
+                    UpdateExpression = 'SET Health = :h, #s = :s',
+                    ExpressionAttributeNames = {'#s': 'Status'},
+                    ExpressionAttributeValues = {':h': next_turn_player_info['Health'], ':s': next_turn_player_info['Status'] }   # Update Hand and Health of next player
+                )
             else:
                 # If it is true, update player table and make it false
                 player_table.update_item(
@@ -88,10 +97,7 @@ def lambda_handler(event, context):
            
         elif card['Type'] == 'heal':
             Health = player.get('Health', 100)
-            if Health + 20 > 100:
-                return {'statusCode': 400, 'body': json.dumps({'message': 'Health cannot exceed 100, Throw Another Card'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
-            else:
-                Health = Health + 20
+            Health = min(Health + 20, 100)  # if health goes upto 100, set 100 else min value
             player['Health'] = Health
         
         elif card['Type'] == 'special':
@@ -141,7 +147,7 @@ def lambda_handler(event, context):
         
         for pid in player_ids:
             p_info = player_table.get_item(Key={'PlayerID': pid}).get('Item')
-            if p_info and p_info.get('Status') == 'Active':
+            if p_info and p_info.get('Status') != 'Eliminated':
                 active_players.append(pid)
                 #* if player deck length becomes 0, make him the winner
                 if len(p_info.get('Hand',[])) == 0:
