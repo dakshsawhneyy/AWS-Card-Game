@@ -57,9 +57,51 @@ const Game = () => {
   // use effect to change values as game stats changes
   useEffect(() => {
     fetchGame();
-    const interval = setInterval(fetchGame, 3000);
+    const interval = setInterval(fetchGame, 2500);
     return () => clearInterval(interval)
   }, [])
+  
+  // useEffect(() => {
+  //   const ws = new WebSocket("wss://evpfijv179.execute-api.ap-south-1.amazonaws.com/dev-ws/")
+
+  //   ws.onopen = () => {
+  //     console.log("WebSocket connection established");
+  //   }
+
+  //   ws.onmessage = (message => {
+  //     const data = JSON.parse(message.data)
+  //     console.log("WebSocket message received:", data)
+
+  //     // update states
+  //     setGameInfo(data)
+
+  //     const pInfo = data.Players.find(p => p.PlayerID === playerId)
+  //     setPlayerInfo(pInfo)
+  //     setHand(pInfo.Hand)
+
+  //     const cpname = data.Players.find(p => p.PlayerID === data.CurrentTurn)?.Name
+  //     setCurrentTurnPlayer(cpname)
+
+  //     // if Game Status is ended, navigate directly to stats
+  //     if(data.Status == 'ended'){
+  //       navigate('/stats')
+  //     }
+
+  //     // Send Message (optional)
+  //     setMessage("Game state updated via WebSocket")
+  //   })
+
+  //   ws.onerror = (error) => {
+  //     console.error("WebSocket error:", error)
+  //   }
+
+  //   ws.onclose = () => {
+  //     console.log("Disconnected from WebSocket")
+  //   }
+
+  //   return () => ws.close();
+  // }, [])
+
 
   // draw card function
   const drawCard = async() => {
