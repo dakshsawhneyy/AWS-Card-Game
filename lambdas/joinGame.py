@@ -39,6 +39,12 @@ def lambda_handler(event, context):
                 'Hand': [],     # we will modify furthur
                 'Health': 100,
                 'Status': 'Active',
+                
+                'TotalAttacks': 0,      # total attack cards thrown
+                'TotalDamageDealt': 0,
+                'TotalHeals': 0,
+                'TotalSpecial': 0,
+                
                 'LastActionAt': datetime.datetime.now().isoformat(),  # Store current time in ISO format
             }   
         )
