@@ -6,6 +6,8 @@ dynamodb = boto3.resource('dynamodb')
 game_table = dynamodb.Table('GameSession')
 player_table = dynamodb.Table('Players')
 
+cloudwatch = boto3.client('cloudwatch')     # pushing metrics like attack cards thrown, special and heal to cloudwatch
+
 def lambda_handler(event, context):
     try:
         body = json.loads(event['body'])
@@ -27,7 +29,7 @@ def lambda_handler(event, context):
         # only admin can manually end the game, no other player can
         if player_id != player_ids[0]:
             return { 'statusCode': 403, 'body': json.dumps({'message': 'Forbidden: Only the game admin can end the game.'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
-            
+
         # Manually end the game if only one active player is left
         active_players = []
         for pid in player_ids:
@@ -53,6 +55,33 @@ def lambda_handler(event, context):
             UpdateExpression = update_exp,
             ExpressionAttributeNames = exp_attr_names,
             ExpressionAttributeValues = exp_attr_values   
+        )
+        
+        # adding metrics to cloud watch
+        cloudwatch.put_metric_data(
+            Namespace = 'CardGameMetrics',
+            MetricData = [
+                {
+                    'MetricName': 'AttackCardsThrown',
+                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalAttacks', 0) for p in player_ids),
+                    'Unit': 'Count'
+                },
+                {
+                    'MetricName': 'SpecialCardsThrown',
+                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalSpecial', 0) for p in player_ids),
+                    'Unit': 'Count'
+                },
+                {
+                    'MetricName': 'HealCardsThrown',
+                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalHeals', 0) for p in player_ids),
+                    'Unit': 'Count'
+                },
+                {
+                    'MetricName': 'DamageDealt',
+                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalDamageDealt', 0) for p in player_ids),
+                    'Unit': 'Count'
+                }
+            ]
         )
         
         return { 'statusCode': 200, 'body': json.dumps({ 'message':'Game Ended', 'Winner': winner_id if winner_id else None }),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
