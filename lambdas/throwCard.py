@@ -62,9 +62,17 @@ def lambda_handler(event, context):
         next_turn_player_info = player_table.get_item(Key = {'PlayerID':next_turn}).get('Item')        
         hand_for_special = updated_hand.copy()
         
+        # retrieving the values from player_table
+        attack_cards = player.get('TotalAttacks', 0)    # even if its not present, initialise it with 0
+        damage_dealt = player.get('TotalDamageDealt', 0)
+        heal_cards = player.get('TotalHeals', 0)
+        special_cards = player.get('TotalSpecial', 0)
+        
         #! Apply Affect to player
         if card['Type'] == 'attack':
+            attack_cards += 1
             if next_turn_player_info.get('Shield',False) == False:
+                damage_dealt += 20      # incrementing damage_dealt
                 Health = next_turn_player_info.get('Health', 100)
                 Health = Health - 20
                 if Health <= 0:
@@ -96,11 +104,13 @@ def lambda_handler(event, context):
             )
            
         elif card['Type'] == 'heal':
+            heal_cards += 1     # incrementing heal cards thrown
             Health = player.get('Health', 100)
             Health = min(Health + 20, 100)  # if health goes upto 100, set 100 else min value
             player['Health'] = Health
         
         elif card['Type'] == 'special':
+            special_cards += 1      # incrememnt thrown special cards
             # Give a random card to next player
             next_player_hand = next_turn_player_info['Hand']
             if deck:
@@ -120,17 +130,8 @@ def lambda_handler(event, context):
         # Update Current Player Table
         player_table.update_item(
             Key = {'PlayerID':player_id},
-            UpdateExpression = 'SET Hand = :val, Health = :h',
-            ExpressionAttributeValues = {':val': updated_hand, ':h': player['Health']}   # Update Hand and Health of current player
-        )
-        
-        
-        # Update Next Player Table
-        player_table.update_item(
-            Key = {'PlayerID':next_turn},
-            UpdateExpression = 'SET Health = :h, #s = :s',
-            ExpressionAttributeNames = {'#s': 'Status'},  # Using #s because Status is a reserved keyword in DynamoDB
-            ExpressionAttributeValues = {':h': next_turn_player_info['Health'], ':s': next_turn_player_info['Status'] }   # Update Hand and Health of next player
+            UpdateExpression = 'SET Hand = :val, Health = :h, TotalSpecial = :s, TotalHeals = :heal, TotalDamageDealt = :dam, TotalAttacks = :attack',
+            ExpressionAttributeValues = {':val': updated_hand, ':h': player['Health'], ':s': special_cards, ':heal': heal_cards, ':dam': damage_dealt, ':attack': attack_cards}   # Update Hand and Health of current player
         )
         
         
