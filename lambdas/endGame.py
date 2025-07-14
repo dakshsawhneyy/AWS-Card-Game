@@ -57,32 +57,38 @@ def lambda_handler(event, context):
             ExpressionAttributeValues = exp_attr_values   
         )
         
-        # adding metrics to cloud watch
-        cloudwatch.put_metric_data(
-            Namespace = 'CardGameMetrics',
-            MetricData = [
-                {
-                    'MetricName': 'AttackCardsThrown',
-                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalAttacks', 0) for p in player_ids),
-                    'Unit': 'Count'
-                },
-                {
-                    'MetricName': 'SpecialCardsThrown',
-                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalSpecial', 0) for p in player_ids),
-                    'Unit': 'Count'
-                },
-                {
-                    'MetricName': 'HealCardsThrown',
-                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalHeals', 0) for p in player_ids),
-                    'Unit': 'Count'
-                },
-                {
-                    'MetricName': 'DamageDealt',
-                    'Value': sum(player_table.get_item(Key={'PlayerID': p}).get('Item', {}).get('TotalDamageDealt', 0) for p in player_ids),
-                    'Unit': 'Count'
-                }
-            ]
-        )
+        # adding metrics to cloud watch -- per player so that we get metrics per player
+        for pid in player_ids:
+            p_info = player_table.get_item(Key={'PlayerID':pid}).get('Item', {})
+            cloudwatch.put_metric_data(     # fetch metrics per player -- without this we combine all player usage
+                Namespace = 'CardGameMetrics',
+                MetricData = [
+                    {
+                        'MetricName': 'AttackCardsThrown',
+                        'Dimensions': [{'Name': 'PlayerID', 'Value': p_info['PlayerName']}],
+                        'Value': p_info.get('TotalAttacks', 0),
+                        'Unit': 'Count'
+                    },
+                    {
+                        'MetricName': 'DamageDealt',
+                        'Dimensions': [{'Name': 'PlayerID', 'Value': p_info['PlayerName']}],
+                        'Value': p_info.get('TotalDamageDealt', 0),
+                        'Unit': 'Count'
+                    },
+                    {
+                        'MetricName': 'SpecialCardsThrown',
+                        'Dimensions': [{'Name': 'PlayerID', 'Value': p_info['PlayerName']}],
+                        'Value': p_info.get('TotalSpecial', 0),
+                        'Unit': 'Count'
+                    },
+                    {
+                        'MetricName': 'HealCardsThrown',
+                        'Dimensions': [{'Name': 'PlayerID', 'Value': p_info['PlayerName']}],
+                        'Value': p_info.get('TotalHeals', 0),
+                        'Unit': 'Count'
+                    }
+                ]
+            )
         
         return { 'statusCode': 200, 'body': json.dumps({ 'message':'Game Ended', 'Winner': winner_id if winner_id else None }),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'} }
     except Exception as e:
