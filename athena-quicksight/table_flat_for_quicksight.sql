@@ -14,3 +14,4 @@ SELECT
 FROM aws_cardgame_db.cardgame_players;
 
 -- ? quicksight doesn't understand nested queries, so we need to flatten it
+-- * THis is created as a view table, so quicksight can easily see it
