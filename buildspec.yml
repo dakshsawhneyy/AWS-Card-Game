@@ -1,4 +1,3 @@
-# Specify the Lambda functions to update automatically during each build.
 version: 0.2
 
 phases:
@@ -57,12 +56,8 @@ phases:
       - rm -f throwCard.zip
       - zip throwCard.zip throwCard.py
       - aws s3 cp throwCard.zip s3://aws-cardgame-metrics-bucket/lambdas/throwCard.zip
-# fileb:// means read the file as binary data, which is required for uploading zipped code to AWS Lambda.
-# file:// means read the file as text data; for Lambda updates, fileb:// must be used to ensure the zip file is transferred correctly.ile fileb://throwCard.zip
       - cd ..
   
   post_build:
     commands:
       - echo "All Lambda functions updated and zipped successfully."
-
-# fileb:// means read it as binary data and file:// means read it as text
