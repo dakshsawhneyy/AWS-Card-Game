@@ -87,6 +87,26 @@ def lambda_handler(event, context):
                     ExpressionAttributeNames = {'#s': 'Status'},
                     ExpressionAttributeValues = {':h': next_turn_player_info['Health'], ':s': next_turn_player_info['Status'] }   # Update Hand and Health of next player
                 )
+                # immediately check if only one player remains - declare him as winner # ! Although i was doing same in end, but frontend was seeing still active game status and hence it was not ending
+                active_players = []
+                for pid in player_ids:
+                    p__info = player_table.get_item(Key={'PlayerID':pid}).get('Item')
+                    if p__info and p__info['Status'] != 'Eliminated':
+                        active_players.append(pid)
+                        
+                # if length of active players becomes 0, update the winnerID
+                if len(active_players) == 1:
+                    # update the winner id and table's status and winnerID
+                    WinnerID = active_players[0]
+                    game_table.update_item(
+                        Key = {'GameID': game_id},
+                        UpdateExpression = 'SET #s = :s, #w = :w',
+                        ExpressionAttributeNames = {'#s': 'Status', '#w': 'WinnerID'},
+                        ExpressionAttributeValues = {':s': 'ended', ':w': WinnerID}    
+                    )
+                    return { 'statusCode': 200, 'body': json.dumps({ 'message': 'Card played. Game Ended', 'WinnerID': WinnerID }), 'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
+                    
+                
             else:
                 # If it is true, update player table and make it false
                 player_table.update_item(
@@ -149,15 +169,12 @@ def lambda_handler(event, context):
         for pid in player_ids:
             p_info = player_table.get_item(Key={'PlayerID': pid}).get('Item')
             if p_info and p_info.get('Status') != 'Eliminated':
-                active_players.append(pid)
+                active_players.append(pid)  # not append that player, whose status is eliminated
                 #* if player deck length becomes 0, make him the winner
-                if len(p_info.get('Hand',[])) == 0:
+                if not WinnerID and len(p_info.get('Hand',[])) == 0:
                     WinnerID = pid
                     break
                 
-        # if winner ID nhi hai tb bhi active players 1 hi hai toh usko winner declare krdo
-        if not WinnerID and len(active_players) == 1:
-            WinnerID = active_players[0]
             
         # Update game table, if WinnerID is present
         if WinnerID:
