@@ -1,11 +1,11 @@
 version: 0.2
 
-phases:
+phase:
   install:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installation phase: nothing special yet"
+      - echo "Installation phase, nothing special yet"
   build:
     commands:
       - echo "Building and zipping all lambda functions"
