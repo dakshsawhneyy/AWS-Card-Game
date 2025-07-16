@@ -1,4 +1,4 @@
-# * we'll specify which lambdas we using, so they gets updated everytime automatically
+# Specify the Lambda functions to update automatically during each build.
 version: 0.2
 
 phases:
@@ -12,45 +12,53 @@ phases:
       - echo "Building and zipping all lambda functions"
     
       - cd createGame
-      - zip -r function.zip createGame.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/createGame.zip
-      - aws lambda update-function-code --function-name createGame --zip-file fileb://function.zip
+      - rm -f createGame.zip
+      - zip createGame.zip createGame.py
+      - aws s3 cp createGame.zip s3://aws-cardgame-metrics-bucket/lambdas/createGame.zip
+      - aws lambda update-function-code --function-name createGame --zip-file fileb://createGame.zip
       - cd ..
 
       - cd joinGame
-      - zip -r function.zip joinGame.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/joinGame.zip
-      - aws lambda update-function-code --function-name joinGame --zip-file fileb://function.zip  
+      - rm -f joinGame.zip
+      - zip joinGame.zip joinGame.py
+      - aws s3 cp joinGame.zip s3://aws-cardgame-metrics-bucket/lambdas/joinGame.zip
+      - aws lambda update-function-code --function-name joinGame --zip-file fileb://joinGame.zip  
       - cd ..
 
       - cd startGame
-      - zip -r function.zip startGame.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/startGame.zip
-      - aws lambda update-function-code --function-name startGame --zip-file fileb://function.zip
+      - rm -f startGame.zip
+      - zip startGame.zip startGame.py
+      - aws s3 cp startGame.zip s3://aws-cardgame-metrics-bucket/lambdas/startGame.zip
+      - aws lambda update-function-code --function-name startGame --zip-file fileb://startGame.zip
       - cd ..
 
       - cd endGame
-      - zip -r function.zip endGame.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/endGame.zip
-      - aws lambda update-function-code --function-name endGame --zip-file fileb://function.zip
+      - rm -f endGame.zip
+      - zip endGame.zip endGame.py
+      - aws s3 cp endGame.zip s3://aws-cardgame-metrics-bucket/lambdas/endGame.zip
+      - aws lambda update-function-code --function-name endGame --zip-file fileb://endGame.zip
       - cd ..
 
       - cd gameStats
-      - zip -r function.zip gameStats.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/gameStats.zip
-      - aws lambda update-function-code --function-name gameStats --zip-file fileb://function.zip
+      - rm -f gameStats.zip
+      - zip gameStats.zip gameStats.py
+      - aws s3 cp gameStats.zip s3://aws-cardgame-metrics-bucket/lambdas/gameStats.zip
+      - aws lambda update-function-code --function-name gameStats --zip-file fileb://gameStats.zip
       - cd ..
 
       - cd drawCard
-      - zip -r function.zip drawCard.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/drawCard.zip
-      - aws lambda update-function-code --function-name drawCard --zip-file fileb://function.zip
+      - rm -f drawCard.zip
+      - zip drawCard.zip drawCard.py
+      - aws s3 cp drawCard.zip s3://aws-cardgame-metrics-bucket/lambdas/drawCard.zip
+      - aws lambda update-function-code --function-name drawCard --zip-file fileb://drawCard.zip
       - cd ..
 
       - cd throwCard
-      - zip -r function.zip throwCard.py
-      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/throwCard.zip
-      - aws lambda update-function-code --function-name throwCard --zip-file fileb://function.zip
+      - rm -f throwCard.zip
+      - zip throwCard.zip throwCard.py
+      - aws s3 cp throwCard.zip s3://aws-cardgame-metrics-bucket/lambdas/throwCard.zip
+# fileb:// means read the file as binary data, which is required for uploading zipped code to AWS Lambda.
+# file:// means read the file as text data; for Lambda updates, fileb:// must be used to ensure the zip file is transferred correctly.ile fileb://throwCard.zip
       - cd ..
   
   post_build:
