@@ -1,0 +1,60 @@
+# * we'll specify which lambdas we using, so they gets updated everytime automatically
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - echo "Installation phase: nothing special yet"
+  build:
+    commands:
+      - echo "Building and zipping all lambda functions"
+    
+      - cd createGame
+      - zip -r function.zip createGame.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/createGame.zip
+      - aws lambda update-function-code --function-name createGame --zip-file fileb://function.zip
+      - cd ..
+
+      - cd joinGame
+      - zip -r function.zip joinGame.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/joinGame.zip
+      - aws lambda update-function-code --function-name joinGame --zip-file fileb://function.zip  
+      - cd ..
+
+      - cd startGame
+      - zip -r function.zip startGame.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/startGame.zip
+      - aws lambda update-function-code --function-name startGame --zip-file fileb://function.zip
+      - cd ..
+
+      - cd endGame
+      - zip -r function.zip endGame.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/endGame.zip
+      - aws lambda update-function-code --function-name endGame --zip-file fileb://function.zip
+      - cd ..
+
+      - cd gameStats
+      - zip -r function.zip gameStats.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/gameStats.zip
+      - aws lambda update-function-code --function-name gameStats --zip-file fileb://function.zip
+      - cd ..
+
+      - cd drawCard
+      - zip -r function.zip drawCard.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/drawCard.zip
+      - aws lambda update-function-code --function-name drawCard --zip-file fileb://function.zip
+      - cd ..
+
+      - cd throwCard
+      - zip -r function.zip throwCard.py
+      - aws s3 cp function.zip s3://aws-cardgame-metrics-bucket/lambdas/throwCard.zip
+      - aws lambda update-function-code --function-name throwCard --zip-file fileb://function.zip
+      - cd ..
+  
+  post_build:
+    commands:
+      - echo "All Lambda functions updated and zipped successfully."
+
+# fileb:// means read it as binary data and file:// means read it as text
