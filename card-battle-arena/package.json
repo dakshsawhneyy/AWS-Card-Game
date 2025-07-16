@@ -16,8 +16,10 @@
     "framer-motion": "^12.23.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-parallax-tilt": "^1.7.300",
     "react-router-dom": "^7.6.3",
     "react-toastify": "^11.0.5",
+    "tilt": "^0.2.0",
     "toast": "^0.5.4"
   },
   "devDependencies": {

@@ -152,7 +152,7 @@ const Game = () => {
   const isMyTurn = gameInfo.CurrentTurn === playerId;   // return true or false and be used for playing turn of player
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-400 to-pink-500 flex flex-col items-center p-8 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-400 to-pink-500 flex flex-col items-center py-8 text-white">
       <h1 className="text-4xl font-bold mb-4">Game Arena</h1>
 
       <h1 className="text-3xl font-bold">Players:</h1>
@@ -165,7 +165,7 @@ const Game = () => {
       </div>
 
       { /* Show Current Player All Cards */ }
-      <div className="flex flex-wrap justify-center gap-4 mb-6">
+      <div className="flex flex-wrap justify-center gap-2 mb-6">
         {hand.map((item) => (
           <Card key={item.CardID} card={item} onThrow={throwCard} disabled={!isMyTurn} />
         ))}
