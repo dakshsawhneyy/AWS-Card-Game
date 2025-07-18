@@ -5,27 +5,35 @@ import traceback
 
 dynamodb = boto3.resource('dynamodb')
 msgTable = dynamodb.Table('gameChatMessages')
+playerTable = dynamodb.Table('Players')
 
 def lambda_handler(event, context):
     try:
-        body = json.loads(event['body'])
+        if 'body' in event:
+            body = json.loads(event['body'])  # API Gateway/Lambda call
+        else:
+            body = event  # Direct Lambda test or internal call
         
-        game_id = body['GameID']
-        sender = body['sender']
-        message = body['message']
+        gameID = str(body['GameID'])
+        sender = str(body['sender'])
+        messg = str(body['messg'])
         
-        if not game_id or not sender or not message:
+        if not gameID or not sender or not messg:
             return {'statusCode': 400, 'body': json.dumps({'message': 'Missing GameID, Sender, or Message'}),'headers': {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Credentials': 'true'}}
         
-        time_stamp = int(time.time())  # Get current time
+        time_stamp = str(int(time.time() * 1000))  # Get current time in ms
+        
+        # Fetching Player Name using sender id
+        player_info = playerTable.get_item(Key={'PlayerID': sender}).get('Item')
+        player_name = player_info.get('PlayerName', "")
         
         # update table
         msgTable.put_item(
             Item = {
-                'GameID': game_id,
-                'PlayerID': player_id,
+                'GameID': gameID,
                 'sender': sender,
-                'message': message,
+                'player_name': player_name,
+                'messg': messg,
                 'TimeStamp': time_stamp
             }
         )
