@@ -8,8 +8,10 @@ chat_table = dynamodb.Table('gameChatMessages')
 
 def lambda_handler(event, context):    
     try:
-        game_id = event['queryStringParameters']['GameID']   # get request
-        
+        # Safely extract GameID
+        params = event.get("queryStringParameters") or {}
+        game_id = params.get("GameID")
+                
         response = chat_table.query(    # .query is used to retrieve object from DynamoDB Table
             KeyConditionExpression = Key('GameID').eq(game_id),     # fetch all key with game_id
             ScanIndexForward = True,    # ascending order, if false then decending order
@@ -19,7 +21,7 @@ def lambda_handler(event, context):
         print(response)
         return {
             'statusCode': 200,
-            'body': json.dumps({'messages' : response['Items']}),  # return all items in JSON format -- ifrontend expects in messages
+            'body': json.dumps({'messages' : response.get('Items', [])}),  # return all items in JSON format -- ifrontend expects in messages
             'headers': {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Credentials': 'true'
