@@ -10,8 +10,6 @@ phase:
     commands:
       - echo "Building and zipping all lambda functions"
     
-      - cd lambdas
-
       - cd createGame
       - rm -f createGame.zip
       - zip createGame.zip createGame.py
