@@ -1,17 +1,17 @@
 # AWS-Card-Game
 
 Don't have physical cards to play with friends? No problem.
-I built **AWS-Card-Game** — a fully serverless, production-grade, multiplayer card game using over 20 AWS services. I lost count. Maybe you can count. From real-time game state, live health tracking, multiplayer turn logic, in-game chat, automated pipelines, to secured deployments — this is not a side project. This is a cloud-native engineering achievement.
+I built **AWS-Card-Game** - a fully serverless, production-grade, multiplayer card game using over 20 AWS services. I lost count. Maybe you can count. From real-time game state, live health tracking, multiplayer turn logic, in-game chat, automated pipelines, to secured deployments - this is not a side project. This is a cloud-native engineering achievement.
 
 I didn’t just build a game.
-I engineered a real-time, cloud-scalable multiplayer experience — with CI/CD, observability, IAM-tightened security, real-time chat, fault tolerance, and stateful persistence — all in AWS. This is what happens when DevOps meets game logic.
+I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, observability, IAM-tightened security, real-time chat, fault tolerance, and stateful persistence - all in AWS. This is what happens when DevOps meets game logic.
 
 ---
 
 ## 🧝🏻‍♀️ Architecture Breakdown
 
 ###  Backend (Fully Serverless)
-- **Lambda Functions**: Handle every single action — from `throwCard`, `endGame`, `startGame`, `attackPlayer`, `sendMessage`, etc.
+- **Lambda Functions**: Handle every single action - from `throwCard`, `endGame`, `startGame`, `attackPlayer`, `sendMessage`, etc.
 - **API Gateway**: Expose all backend Lambda endpoints as RESTful APIs.
 - **DynamoDB**:
   - `games` table: Tracks all live and ended games.
@@ -27,7 +27,7 @@ I engineered a real-time, cloud-scalable multiplayer experience — with CI/CD, 
   - Buttons: attack, throw, heal, end game.
 
 ###  CI/CD & Automation
-- **CodePipeline** + **CodeBuild**: Push your code and it deploys — frontend, backend, Lambda packages, all automated.
+- **CodePipeline** + **CodeBuild**: Push your code and it deploys - frontend, backend, Lambda packages, all automated.
 - **CloudFormation**: Infra-as-code, redeploy the whole setup in minutes.
 
 ### Monitoring & Logs
@@ -36,7 +36,7 @@ I engineered a real-time, cloud-scalable multiplayer experience — with CI/CD, 
 - **Athena + QuickSight (planned)**: For gameplay analytics and leaderboard insights.
 
 ### In-Game Chat Feature
-**Phase 8: Extra Magic** — Chat section implemented between players, live and stored via:
+**Phase 8: Extra Magic** - Chat section implemented between players, live and stored via:
 - **Lambda**: `sendMessageToGame`, `getMessagesForGame`
 - **API Gateway**: REST APIs connected to chat functions
 - **DynamoDB Table**: `gameChatMessages` for storing timestamped messages per game
