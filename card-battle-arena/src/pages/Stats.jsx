@@ -17,7 +17,7 @@ const Stats = () => {
         }
       })
       setGameData(response.data)
-      console.log(response.data)
+      // console.log(response.data)
 
       // Get Players Info
       setPlayersData(response.data.Players)
