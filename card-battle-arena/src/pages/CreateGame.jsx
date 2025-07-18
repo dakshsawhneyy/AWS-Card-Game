@@ -16,6 +16,7 @@ const CreateGame = () => {
             // Save Info to local storage
             localStorage.setItem('gameId',gameId)
             localStorage.setItem('playerId',playerId)
+            localStorage.setItem('playerName',playerName)
             
             // Navigate to Lobby
             navigate('/lobby')

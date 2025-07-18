@@ -18,6 +18,7 @@ const JoinGame = () => {
 
       localStorage.setItem("gameId", gameId)
       localStorage.setItem('playerId', playerId)
+      localStorage.setItem('playerName',playerName)
       
       navigate('/lobby');
     } catch (error) {

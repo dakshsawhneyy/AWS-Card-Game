@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import PlayerCard from "../components/PlayerCard";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import ChatWindow from "../components/ChatWindow";
 
 const Game = () => {
 
@@ -12,6 +13,8 @@ const Game = () => {
   const [hand, setHand] = useState([]); 
   const [message, setMessage] = useState("");   // to show messages like Card Drawn, Card Thrown 
   const [currentTurnPlayer, setCurrentTurnPlayer] = useState("")  // store the name of player whose current turn is going on
+
+  const [showChat, setShowChat] = useState(false)
 
   const navigate = useNavigate()
 
@@ -44,7 +47,7 @@ const Game = () => {
       setCurrentTurnPlayer(cpname.Name)
       
       // if Game Status is ended, navigate directly to stats
-      if(gameInfo.Status == 'ended'){
+      if(response.data.Status == 'ended'){
         navigate('/stats')
       }
 
@@ -174,6 +177,13 @@ const Game = () => {
       <button onClick={drawCard} className={`px-6 py-3 rounded-xl transition ${isMyTurn ? "bg-black hover:scale-105" : "bg-gray-600 cursor-not-allowed"}`}>Draw a Card</button>
 
       {message && <p className="mt-4">{message}</p>}
+
+      <button className="absolute top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow" onClick={() => setShowChat(true)}>Show Chat</button>
+
+      {/* Showing Show Chat Box */}
+      {showChat && (
+        <ChatWindow gameId={gameId} playerId={playerId} onClose={() => setShowChat(false)} />
+      )}
 
       { /* End Game Button, Calling of End Game API */}
       <button className="mt-4 bg-red-600 hover:bg-red-800 px-6 py-3 rounded-xl transition" onClick={endGame}>END GAME</button>
