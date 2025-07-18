@@ -44,7 +44,7 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 
 ---
 
-## 📈 Phased Development (like Game Levels)
+##  Phased Development (like Game Levels)
 
 | Phase | Goal                            | AWS Skills Focus                                 |
 |-------|----------------------------------|--------------------------------------------------|
