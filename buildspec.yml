@@ -10,6 +10,8 @@ phase:
     commands:
       - echo "Building and zipping all lambda functions"
     
+      - cd lambdas
+
       - cd createGame
       - rm -f createGame.zip
       - zip createGame.zip createGame.py
@@ -56,6 +58,18 @@ phase:
       - rm -f throwCard.zip
       - zip throwCard.zip throwCard.py
       - aws s3 cp throwCard.zip s3://aws-cardgame-metrics-bucket/lambdas/throwCard.zip
+      - cd ..
+
+      - cd sendChatMessage
+      - rm -f sendChatMessage.zip
+      - zip sendChatMessage.zip sendChatMessage.py
+      - aws s3 cp sendChatMessage.zip s3://aws-cardgame-metrics-bucket/lambdas/sendChatMessage.zip
+      - cd ..
+
+      - cd getChatMessage
+      - rm -f getChatMessage.zip
+      - zip getChatMessage.zip getChatMessage.py
+      - aws s3 cp getChatMessage.zip s3://aws-cardgame-metrics-bucket/lambdas/getChatMessage.zip
       - cd ..
   
   post_build:
