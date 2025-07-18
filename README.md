@@ -36,7 +36,7 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 - **Athena + QuickSight (planned)**: For gameplay analytics and leaderboard insights.
 
 ### In-Game Chat Feature
-**Phase 8: Extra Magic** - Chat section implemented between players, live and stored via:
+**Extra Magic** - Chat section implemented between players, live and stored via:
 - **Lambda**: `sendMessageToGame`, `getMessagesForGame`
 - **API Gateway**: REST APIs connected to chat functions
 - **DynamoDB Table**: `gameChatMessages` for storing timestamped messages per game
