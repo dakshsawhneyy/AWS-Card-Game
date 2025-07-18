@@ -12,10 +12,10 @@ const ChatWindow = ({gameId, playerId, onClose}) => {
         try {
             const response = await axios.get("https://a7suws2gr6.execute-api.ap-south-1.amazonaws.com/dev/getChatMessage",{
                 params: {
-                    GameID: gameId
+                    GameID: gameId,
                 }
             })
-            //console.log(response)
+            // console.log(response)
             setMessages(response.data.messages)
         } catch (error) {
             console.error(error)
@@ -29,9 +29,10 @@ const ChatWindow = ({gameId, playerId, onClose}) => {
             const response = await axios.post("https://a7suws2gr6.execute-api.ap-south-1.amazonaws.com/dev/sendChatMessage",{
                 GameID: gameId,
                 sender: playerId,
-                message: msg     // thats why created new state
+                messg: msg     // thats why created new state
             })
             setMsg('')  // empty msg after adding to db
+            // console.log("Message Sent",response)
             // fetchMessages()     // refresh chat
         } catch (error) {
             console.error(error)
@@ -47,17 +48,17 @@ const ChatWindow = ({gameId, playerId, onClose}) => {
     }, [])
 
   return (
-    <div className='absolute right-4 bottom-4 bg-white border border-gray-400 rounded-lg shadow-lg w-80 h-96 p-4 z-50 flex flex-col'>
+    <div className='absolute right-4 bottom-4 bg-white border border-gray-400 rounded-lg shadow-lg w-80 h-96 p-4 z-50 flex flex-col text-black'>
         <div className='flex justify-between items-center mb-2'>
             <h2 className='text-lg font-semibold'>Game Chat</h2>
             <button className="text-red-600" onClick={onClose}>✖</button>
         </div>
 
-        <div className='flex-1 overflow-y-auto border rounded p-2 bg-gray-50'>
+        <div className='flex-1 overflow-y-auto border rounded p-2 bg-gray-50 text-black'>
             { messages && (
                 messages.map((item, index) => (
                     <div key={index} className='mb-1'>
-                        <strong className=''>{item.sender}:</strong>{item.message}
+                        <strong className=''>{item.player_name || item.sender}: </strong><span className=''> {item.messg}</span>
                     </div>
                 ))
             )}

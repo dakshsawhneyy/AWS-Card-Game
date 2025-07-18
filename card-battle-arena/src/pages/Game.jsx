@@ -178,7 +178,7 @@ const Game = () => {
 
       {message && <p className="mt-4">{message}</p>}
 
-      <button className="absolute top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow" onClick={() => setShowChat(true)}>Show Chat</button>
+      <button className={`absolute top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow ${!showChat ? "text-black" : "disabled opacity-0 pointer-events-none"}`} onClick={() => setShowChat(true)}>Show Chat</button>
 
       {/* Showing Show Chat Box */}
       {showChat && (
