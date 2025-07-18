@@ -23,10 +23,11 @@ def lambda_handler(event, context):
         msgTable.put_item(
             Item = {
                 'GameID': game_id,
+                'PlayerID': player_id,
                 'sender': sender,
                 'message': message,
                 'TimeStamp': time_stamp
-            }   
+            }
         )
         
         return {
