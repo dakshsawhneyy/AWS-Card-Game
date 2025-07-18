@@ -58,3 +58,19 @@ dynamodb.create_table(
         'WriteCapacityUnits': 5
     }
 )
+
+dynamodb.create_table(
+    TableName='gameChatMessages',
+    KeySchema=[
+        {'AttributeName': 'GameID', 'KeyType': 'HASH'},  # Partition Key
+        {'AttributeName': 'TimeStamp', 'KeyType': 'RANGE'},  # Sort Key (for message ordering)
+    ],
+    AttributeDefinitions=[
+        {'AttributeName': 'GameID', 'AttributeType': 'S'},  # String type
+        {'AttributeName': 'TimeStamp', 'AttributeType': 'S'},  # String type for timestamp
+    ],
+    ProvisionedThroughput={
+        'ReadCapacityUnits': 5,     # 5 read/write per second
+        'WriteCapacityUnits': 5
+    }
+)
