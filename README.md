@@ -53,7 +53,7 @@ I engineered a real-time, cloud-scalable multiplayer experience — with CI/CD, 
 | 3     | Frontend & User Interaction     | Amplify, S3 Static Hosting, Cognito              |
 | 4     | Game State & Realtime           | WebSocket, DynamoDB Streams, SNS (future)        |
 | 5     | Scoreboard & Analytics          | CloudWatch, Athena, QuickSight                   |
-| 6     | Security & Auth                 | IAM, Cognito, WAF, Secrets Manager               |
+| 6     | Security & Auth                 | IAM, Secrets Manager                             |
 | 7     | Automation & Deployment         | CloudFormation, CodePipeline, CodeBuild          |
 | 8     | Extra Magic                     | Lambda Chat System, Game Logging, Live UX Boost  |
 
