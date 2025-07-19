@@ -6,6 +6,8 @@ I built **AWS-Card-Game** - a fully serverless, production-grade, multiplayer ca
 I didn’t just build a game.
 I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, observability, IAM-tightened security, real-time chat, fault tolerance, and stateful persistence - all in AWS. This is what happens when DevOps meets game logic.
 
+**Preview:** https://master.dmyndyok8l8sp.amplifyapp.com
+
 ---
 
 ## 🧝🏻‍♀️ Architecture Breakdown
