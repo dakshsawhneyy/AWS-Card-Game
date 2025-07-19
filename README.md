@@ -33,7 +33,7 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 ### Monitoring & Logs
 - **CloudWatch**: Full visibility into every player move, attack, throwCard.
 - Game logic outputs structured logs, ready for log-based dashboards.
-- **Athena + QuickSight (planned)**: For gameplay analytics and leaderboard insights.
+- **Athena + QuickSight **: For gameplay analytics and leaderboard insights.
 
 ### In-Game Chat Feature
 **Extra Magic** - Chat section implemented between players, live and stored via:
@@ -53,7 +53,7 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 | 3     | Frontend & User Interaction     | Amplify, S3 Static Hosting, Cognito              |
 | 4     | Game State & Realtime           | WebSocket, DynamoDB Streams, SNS (future)        |
 | 5     | Scoreboard & Analytics          | CloudWatch, Athena, QuickSight                   |
-| 6     | Security & Auth                 | IAM, Secrets Manager                             |
+| 6     | Security & Auth                 | IAM, Secrets Manager, WAF                        |
 | 7     | Automation & Deployment         | CloudFormation, CodePipeline, CodeBuild          |
 | 8     | Extra Magic                     | Lambda Chat System, Game Logging, Live UX Boost  |
 
