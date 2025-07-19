@@ -1,7 +1,7 @@
 # AWS-Card-Game
 
 Don't have physical cards to play with friends? No problem.
-I built **AWS-Card-Game** - a fully serverless, production-grade, multiplayer card game using over 20 AWS services. I lost count. Maybe you can count. From real-time game state, live health tracking, multiplayer turn logic, in-game chat, automated pipelines, to secured deployments - this is not a side project. This is a cloud-native engineering achievement.
+I built **AWS-Card-Game** - a fully serverless, production-grade, multiplayer card game using approx. 20+ AWS services. I lost count. Maybe you can count. From real-time game state, live health tracking, multiplayer turn logic, in-game chat, automated pipelines, to secured deployments - this is not a side project. This is a cloud-native engineering achievement.
 
 I didn’t just build a game.
 I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, observability, IAM-tightened security, real-time chat, fault tolerance, and stateful persistence - all in AWS. This is what happens when DevOps meets game logic.
