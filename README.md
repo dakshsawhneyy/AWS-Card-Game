@@ -87,4 +87,3 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 This isn’t just a card game. It’s an entire AWS ecosystem fused with game logic, CI/CD, scalability, and real-time cloud-native magic.
 
 Play it, deploy it, break it, or hire me to build your next one.
-
