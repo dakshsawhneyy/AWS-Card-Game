@@ -12,8 +12,6 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 ---
 
 <img width="1848" height="975" alt="image (45)" src="https://github.com/user-attachments/assets/0f18f5c9-6c1f-4fc1-a744-a295385502b3" />
-<img width="1846" height="965" alt="image (43)" src="https://github.com/user-attachments/assets/fec60076-22c5-4536-bf35-46c9ebf14acf" />
-<img width="1920" height="1200" alt="image (42)" src="https://github.com/user-attachments/assets/d7cade74-50c2-4f6a-b4af-ff21e120fb09" />
 
 
 ## 🧝🏻‍♀️ Architecture Breakdown
@@ -37,11 +35,14 @@ I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, ob
 ###  CI/CD & Automation
 - **CodePipeline** + **CodeBuild**: Push your code and it deploys - frontend, backend, Lambda packages, all automated.
 - **CloudFormation**: Infra-as-code, redeploy the whole setup in minutes.
+  <img width="1846" height="965" alt="image (43)" src="https://github.com/user-attachments/assets/fec60076-22c5-4536-bf35-46c9ebf14acf" />
 
 ### Monitoring & Logs
 - **CloudWatch**: Full visibility into every player move, attack, throwCard.
 - Game logic outputs structured logs, ready for log-based dashboards.
 - **Athena + QuickSight **: For gameplay analytics and leaderboard insights.
+
+  <img width="1920" height="1200" alt="image (42)" src="https://github.com/user-attachments/assets/d7cade74-50c2-4f6a-b4af-ff21e120fb09" />
 
 ### In-Game Chat Feature
 **Extra Magic** - Chat section implemented between players, live and stored via:
