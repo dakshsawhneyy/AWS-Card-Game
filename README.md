@@ -7,8 +7,14 @@ I didn’t just build a game.
 I engineered a real-time, cloud-scalable multiplayer experience - with CI/CD, observability, IAM-tightened security, real-time chat, fault tolerance, and stateful persistence - all in AWS. This is what happens when DevOps meets game logic.
 
 **Preview:** https://master.dmyndyok8l8sp.amplifyapp.com
+<img width="1872" height="1046" alt="aws_card_game" src="https://github.com/user-attachments/assets/7feeb303-093b-4285-9b5d-9e92c9a1e4a3" />
 
 ---
+
+<img width="1848" height="975" alt="image (45)" src="https://github.com/user-attachments/assets/0f18f5c9-6c1f-4fc1-a744-a295385502b3" />
+<img width="1846" height="965" alt="image (43)" src="https://github.com/user-attachments/assets/fec60076-22c5-4536-bf35-46c9ebf14acf" />
+<img width="1920" height="1200" alt="image (42)" src="https://github.com/user-attachments/assets/d7cade74-50c2-4f6a-b4af-ff21e120fb09" />
+
 
 ## 🧝🏻‍♀️ Architecture Breakdown
 
